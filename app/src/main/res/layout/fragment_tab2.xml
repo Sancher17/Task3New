@@ -1,0 +1,57 @@
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--tools:context="com.example.alex.maps.MapsFragment">-->
+
+<!--&lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;--><!--<TextView--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:text="@string/hello_blank_fragment" />-->
+
+<!--</FrameLayout>-->
+
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/button_calculate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+
+        android:text="@string/button_calculate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editText_input_number_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:hint="@string/enter_namber_elements"
+        android:inputType="number"
+        app:layout_constraintStart_toEndOf="@+id/button_calculate"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="stop"
+        app:layout_constraintStart_toEndOf="@+id/editText_input_number_map"
+        tools:layout_editor_absoluteY="0dp" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/tab1_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:scrollbars="vertical"
+        tools:context="com.example.alex.collectionsandmap.MainActivity"
+
+        />
+
+</android.support.constraint.ConstraintLayout>
+
+
+    <!--//http://www.techotopia.com/index.php/Working_with_the_Android_GridLayout_in_XML_Layout_Resources-->

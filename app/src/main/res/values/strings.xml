@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">CollectionsAndMap</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_1">Collections</string>
+    <string name="tab_2">Map</string>
+    <string name="enter_namber_elements">elements</string>
+    <string name="button_calculate">Calculate</string>
+</resources>
