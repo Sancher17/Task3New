@@ -15,8 +15,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import com.example.alex.dagger.AppInject;
 import com.example.alex.task3new.R;
 import com.example.alex.utils.Logger;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,22 +36,11 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
     EditText interNumber;
 
 
-//    @Inject
-//    CollectionsAdapter adapter;
+    @Inject
+    CollectionsAdapter adapter;
 
-//    @Inject
-//    CollectionsContract.Presenter presenter;
-
-    // TODO: 23.04.2018 without Dagger
-    CollectionsContract.Presenter presenter = CollectionsPresenter.getInstance();
-    private static CollectionsAdapter adapter = new CollectionsAdapter();
-
-    public static CollectionsFragment newInstance() {
-        CollectionsFragment fragmentCollections = new CollectionsFragment();
-        Bundle args = new Bundle();
-        fragmentCollections.setArguments(args);
-        return fragmentCollections;
-    }
+    @Inject
+    CollectionsContract.Presenter presenter;
 
 
     @Override
@@ -62,7 +54,7 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
 
         recyclerView = root.findViewById(R.id.tab1_recycler);
 
-//        AppInject.getComponent().inject(this);
+        AppInject.getComponent().inject(this);
 
         presenter.attachView(this);
 

@@ -12,11 +12,13 @@ import dagger.Provides;
 @Module
 public class CollectionFragmentModule {
 
+    @Singleton
     @Provides
     CollectionsContract.Presenter provideCollectionsPresenter(){
         return new CollectionsPresenter();
     }
 
+    @Singleton
     @Provides
     CollectionsAdapter provideCollectionsAdapter(){
         return new CollectionsAdapter();

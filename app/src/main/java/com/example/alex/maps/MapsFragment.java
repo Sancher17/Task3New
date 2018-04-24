@@ -2,6 +2,7 @@ package com.example.alex.maps;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,8 +15,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.alex.dagger.AppInject;
 import com.example.alex.task3new.R;
 import com.example.alex.utils.Logger;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,16 +36,11 @@ public class MapsFragment extends Fragment implements MapsContract.View {
     EditText interNumber;
 
 
-    MapsContract.Presenter presenter = MapsPresenter.getInstance();
-    private static MapsAdapter adapter = new MapsAdapter();
+    @Inject
+    MapsContract.Presenter presenter;
 
-    public static MapsFragment newInstance() {
-        MapsFragment fragment = new MapsFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Inject
+    MapsAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +49,8 @@ public class MapsFragment extends Fragment implements MapsContract.View {
         ButterKnife.bind(this, root);
 
         recyclerView = root.findViewById(R.id.tab1_recycler);
+
+        AppInject.getComponent().inject(this);
 
         presenter.attachView(this);
 

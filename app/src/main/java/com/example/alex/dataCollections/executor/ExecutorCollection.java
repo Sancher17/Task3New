@@ -35,11 +35,9 @@ public class ExecutorCollection implements LifecycleExecutor {
 
     private CollectionsPresenter presenter;
 
-    @Inject
     public ExecutorCollection(ExecutorCollectionCallback callback){
         this.callback = callback;
     }
-
 
     @Override
     public void startCalculation(){
@@ -104,7 +102,7 @@ public class ExecutorCollection implements LifecycleExecutor {
                 }
             }
             new Handler(Looper.getMainLooper()).post(() -> {
-                presenter = CollectionsPresenter.getInstance();
+                presenter = new CollectionsPresenter();
                 presenter.calculationStopped();
                 Constants.COUNT_OF_OPERATIONS_COLLECTIONS = 21;
             });
@@ -117,6 +115,11 @@ public class ExecutorCollection implements LifecycleExecutor {
             return executor.isShutdown();
         }
         return false;
+    }
+
+    //functional interface
+    interface ICollections {
+        int start(List list);
     }
 
 }

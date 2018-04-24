@@ -15,15 +15,6 @@ public class MapsPresenter extends PresenterBase<MapsContract.View> implements M
 
     private LifecycleExecutor executor;
 
-    private static MapsPresenter instance;
-
-    public static MapsPresenter getInstance() {
-        if (instance == null) {
-            return instance = new MapsPresenter();
-        }
-        return instance;
-    }
-
     public void attachView(MapsContract.View mvpView) {
         super.attachView(mvpView);
         LOGGER.log("attachView // getView() " + String.valueOf(getView()));

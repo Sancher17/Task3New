@@ -14,15 +14,6 @@ public class CollectionsPresenter extends PresenterBase<CollectionsContract.View
 
     private LifecycleExecutor executor;
 
-    private static CollectionsPresenter instance;
-
-    public static CollectionsPresenter getInstance() {
-        if (instance == null) {
-            return instance = new CollectionsPresenter();
-        }
-        return instance;
-    }
-
     public void attachView(CollectionsContract.View mvpView) {
         super.attachView(mvpView);
         LOGGER.log("attachView // getView() " + String.valueOf(getView()));
@@ -75,7 +66,7 @@ public class CollectionsPresenter extends PresenterBase<CollectionsContract.View
     }
 
     public void calculationStopped(){
-        getView().showCalculationStopped();
+//        getView().showCalculationStopped();
     }
 
     void checkCountOfOperations() {

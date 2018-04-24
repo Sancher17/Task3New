@@ -3,13 +3,7 @@ package com.example.alex.dataMaps.executor;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.example.alex.collections.CollectionsAdapter;
-import com.example.alex.collections.CollectionsPresenter;
 import com.example.alex.constants.Constants;
-import com.example.alex.dataCollections.CollectionsProcessor;
-import com.example.alex.dataCollections.ICollectionsProcessor;
-import com.example.alex.dataCollections.executor.ExecutorCollectionCallback;
-import com.example.alex.dataCollections.executor.ICollections;
 import com.example.alex.arch.LifecycleExecutor;
 import com.example.alex.dataMaps.IMapsProcessor;
 import com.example.alex.dataMaps.MapsProcessor;
@@ -17,13 +11,9 @@ import com.example.alex.maps.MapsAdapter;
 import com.example.alex.maps.MapsPresenter;
 import com.example.alex.utils.Logger;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -93,7 +83,7 @@ public class ExecutorMaps implements LifecycleExecutor {
                 }
             }
             new Handler(Looper.getMainLooper()).post(() -> {
-                presenter = MapsPresenter.getInstance();
+                presenter = new MapsPresenter();
                 presenter.calculationStopped();
                 Constants.COUNT_OF_OPERATIONS_COLLECTIONS = 21;
             });
@@ -108,4 +98,8 @@ public class ExecutorMaps implements LifecycleExecutor {
         return false;
     }
 
+    //functional interface
+    interface IMaps {
+        int start(Map map);
+    }
 }
