@@ -41,8 +41,5 @@ public interface MapsContract {
 
         void stopСalculation();
 
-        void calculationStopped();
-
     }
-
 }

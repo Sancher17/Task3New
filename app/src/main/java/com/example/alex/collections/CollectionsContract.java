@@ -41,8 +41,6 @@ public interface CollectionsContract {
 
         void stopСalculation();
 
-        void calculationStopped();
-
     }
 
 }

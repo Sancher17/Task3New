@@ -8,7 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
-import com.example.alex.dataCollections.CollectionsData;
+import com.example.alex.collections.dataCollections.CollectionsData;
 import com.example.alex.task3new.R;
 import com.example.alex.utils.Logger;
 

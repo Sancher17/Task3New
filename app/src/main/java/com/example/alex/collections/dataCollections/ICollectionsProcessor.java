@@ -1,4 +1,4 @@
-package com.example.alex.dataCollections;
+package com.example.alex.collections.dataCollections;
 
 import java.util.List;
 

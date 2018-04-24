@@ -5,8 +5,8 @@ import com.example.alex.arch.LifecycleExecutor;
 import com.example.alex.arch.PresenterBase;
 import com.example.alex.constants.Constants;
 
-import com.example.alex.dataMaps.executor.ExecutorMaps;
-import com.example.alex.dataMaps.executor.ExecutorMapsCallback;
+import com.example.alex.maps.dataMaps.executor.ExecutorMaps;
+import com.example.alex.maps.dataMaps.executor.ExecutorMapsCallback;
 import com.example.alex.utils.Logger;
 
 public class MapsPresenter extends PresenterBase<MapsContract.View> implements MapsContract.Presenter, ExecutorMapsCallback {
@@ -60,14 +60,15 @@ public class MapsPresenter extends PresenterBase<MapsContract.View> implements M
     }
 
     @Override
+    public void responseCalculationStopped() {
+        getView().showCalculationStopped();
+    }
+
+    @Override
     public void responseHideProgress(int position) {
         LOGGER.log("responseHideProgress " + position + " / " +  String.valueOf(getView()));
         getView().hideProgressBar(position);
         checkCountOfOperations();
-    }
-
-    public void calculationStopped(){
-        getView().showCalculationStopped();
     }
 
     void checkCountOfOperations() {

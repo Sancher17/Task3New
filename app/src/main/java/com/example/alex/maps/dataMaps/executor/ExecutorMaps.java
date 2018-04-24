@@ -1,12 +1,12 @@
-package com.example.alex.dataMaps.executor;
+package com.example.alex.maps.dataMaps.executor;
 
 import android.os.Handler;
 import android.os.Looper;
 
 import com.example.alex.constants.Constants;
 import com.example.alex.arch.LifecycleExecutor;
-import com.example.alex.dataMaps.IMapsProcessor;
-import com.example.alex.dataMaps.MapsProcessor;
+import com.example.alex.maps.dataMaps.IMapsProcessor;
+import com.example.alex.maps.dataMaps.MapsProcessor;
 import com.example.alex.maps.MapsAdapter;
 import com.example.alex.maps.MapsPresenter;
 import com.example.alex.utils.Logger;
@@ -83,8 +83,7 @@ public class ExecutorMaps implements LifecycleExecutor {
                 }
             }
             new Handler(Looper.getMainLooper()).post(() -> {
-                presenter = new MapsPresenter();
-                presenter.calculationStopped();
+                callback.responseCalculationStopped();
                 Constants.COUNT_OF_OPERATIONS_COLLECTIONS = 21;
             });
         });

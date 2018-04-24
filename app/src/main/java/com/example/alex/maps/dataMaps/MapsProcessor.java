@@ -1,4 +1,4 @@
-package com.example.alex.dataMaps;
+package com.example.alex.maps.dataMaps;
 
 
 import com.example.alex.utils.Logger;
@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import static com.example.alex.collections.CollectionsFragment.INPUT_NUMBER;
 import static com.example.alex.maps.MapsFragment.INPUT_NUMBER_MAP;
 
 

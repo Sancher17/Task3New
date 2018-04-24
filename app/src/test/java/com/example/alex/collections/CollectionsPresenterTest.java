@@ -1,7 +1,7 @@
 package com.example.alex.collections;
 
-import com.example.alex.dataCollections.executor.ExecutorCollection;
-import com.example.alex.dataCollections.executor.ExecutorCollectionCallback;
+import com.example.alex.collections.dataCollections.executor.ExecutorCollection;
+import com.example.alex.collections.dataCollections.executor.ExecutorCollectionCallback;
 import com.example.alex.utils.Logger;
 
 import org.junit.Before;
@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)

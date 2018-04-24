@@ -175,6 +175,7 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
     @Override
     public void onStart() {
         super.onStart();
+        AppInject.getComponent().inject(this);
         Log.d(TAG, "onStart: ");
     }
 
@@ -188,6 +189,7 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
     @Override
     public void onResume() {
         super.onResume();
+        AppInject.getComponent().inject(this);
         Log.d(TAG, "onResume: " + getActivity().toString());
 
     }
@@ -196,12 +198,14 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        AppInject.getComponent().inject(this);
         Log.d(TAG, "onAttach: ");
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppInject.getComponent().inject(this);
         Log.d(TAG, "onCreate: ");
     }
 

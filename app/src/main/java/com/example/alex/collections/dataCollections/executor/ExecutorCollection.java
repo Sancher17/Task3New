@@ -1,4 +1,4 @@
-package com.example.alex.dataCollections.executor;
+package com.example.alex.collections.dataCollections.executor;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -8,8 +8,8 @@ import com.example.alex.arch.LifecycleExecutor;
 import com.example.alex.collections.CollectionsAdapter;
 import com.example.alex.collections.CollectionsPresenter;
 import com.example.alex.constants.Constants;
-import com.example.alex.dataCollections.CollectionsProcessor;
-import com.example.alex.dataCollections.ICollectionsProcessor;
+import com.example.alex.collections.dataCollections.CollectionsProcessor;
+import com.example.alex.collections.dataCollections.ICollectionsProcessor;
 import com.example.alex.utils.Logger;
 
 import java.util.ArrayList;
@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import javax.inject.Inject;
 
 public class ExecutorCollection implements LifecycleExecutor {
 
@@ -102,8 +100,7 @@ public class ExecutorCollection implements LifecycleExecutor {
                 }
             }
             new Handler(Looper.getMainLooper()).post(() -> {
-                presenter = new CollectionsPresenter();
-                presenter.calculationStopped();
+                callback.responseCalculationStopped();
                 Constants.COUNT_OF_OPERATIONS_COLLECTIONS = 21;
             });
         });

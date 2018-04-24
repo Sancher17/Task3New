@@ -1,4 +1,4 @@
-package com.example.alex.dataMaps.executor;
+package com.example.alex.maps.dataMaps.executor;
 
 
 public interface ExecutorMapsCallback {
@@ -6,4 +6,6 @@ public interface ExecutorMapsCallback {
     void responseHideProgress(int position);
 
     void responseShowProgress(int position);
+
+    void responseCalculationStopped();
 }

@@ -3,8 +3,8 @@ package com.example.alex.collections;
 
 import com.example.alex.arch.PresenterBase;
 import com.example.alex.constants.Constants;
-import com.example.alex.dataCollections.executor.ExecutorCollection;
-import com.example.alex.dataCollections.executor.ExecutorCollectionCallback;
+import com.example.alex.collections.dataCollections.executor.ExecutorCollection;
+import com.example.alex.collections.dataCollections.executor.ExecutorCollectionCallback;
 import com.example.alex.arch.LifecycleExecutor;
 import com.example.alex.utils.Logger;
 
@@ -17,13 +17,11 @@ public class CollectionsPresenter extends PresenterBase<CollectionsContract.View
     public void attachView(CollectionsContract.View mvpView) {
         super.attachView(mvpView);
         LOGGER.log("attachView // getView() " + String.valueOf(getView()));
-
     }
 
     public void detachView() {
         super.detachView();
         LOGGER.log("detachView // getView() " + String.valueOf(getView()));
-
     }
 
 
@@ -59,15 +57,17 @@ public class CollectionsPresenter extends PresenterBase<CollectionsContract.View
     }
 
     @Override
+    public void responseCalculationStopped() {
+        getView().showCalculationStopped();
+    }
+
+    @Override
     public void responseHideProgress(int position) {
         LOGGER.log("responseHideProgress " + position + " / " +  String.valueOf(getView()));
         getView().hideProgressBar(position);
         checkCountOfOperations();
     }
 
-    public void calculationStopped(){
-//        getView().showCalculationStopped();
-    }
 
     void checkCountOfOperations() {
         if (Constants.COUNT_OF_OPERATIONS_COLLECTIONS == 0) {
@@ -75,6 +75,5 @@ public class CollectionsPresenter extends PresenterBase<CollectionsContract.View
             Constants.COUNT_OF_OPERATIONS_COLLECTIONS = 21;
         }
     }
-
 
 }

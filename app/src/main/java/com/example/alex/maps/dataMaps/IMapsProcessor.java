@@ -1,4 +1,4 @@
-package com.example.alex.dataMaps;
+package com.example.alex.maps.dataMaps;
 
 
 import java.util.Map;
