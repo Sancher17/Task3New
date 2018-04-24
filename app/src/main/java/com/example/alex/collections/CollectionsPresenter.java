@@ -1,6 +1,5 @@
 package com.example.alex.collections;
 
-
 import com.example.alex.arch.PresenterBase;
 import com.example.alex.constants.Constants;
 import com.example.alex.collections.dataCollections.executor.ExecutorCollection;
@@ -24,7 +23,6 @@ public class CollectionsPresenter extends PresenterBase<CollectionsContract.View
         LOGGER.log("detachView // getView() " + String.valueOf(getView()));
     }
 
-
     @Override
     public void calculate() {
         executor = new ExecutorCollection(this);
@@ -46,7 +44,6 @@ public class CollectionsPresenter extends PresenterBase<CollectionsContract.View
         }else {
             getView().showCalculationNotStarted();
         }
-
     }
 
     @Override
@@ -68,7 +65,6 @@ public class CollectionsPresenter extends PresenterBase<CollectionsContract.View
         getView().hideProgressBar(position);
         checkCountOfOperations();
     }
-
 
     void checkCountOfOperations() {
         if (Constants.COUNT_OF_OPERATIONS_COLLECTIONS == 0) {

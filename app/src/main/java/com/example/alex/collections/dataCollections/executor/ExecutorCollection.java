@@ -10,7 +10,10 @@ import com.example.alex.collections.CollectionsPresenter;
 import com.example.alex.constants.Constants;
 import com.example.alex.collections.dataCollections.CollectionsProcessor;
 import com.example.alex.collections.dataCollections.ICollectionsProcessor;
+import com.example.alex.dagger.AppInject;
 import com.example.alex.utils.Logger;
+
+import org.androidannotations.annotations.App;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,6 +21,8 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import javax.inject.Inject;
 
 public class ExecutorCollection implements LifecycleExecutor {
 
@@ -27,9 +32,8 @@ public class ExecutorCollection implements LifecycleExecutor {
 
     private ExecutorCollectionCallback callback;
 
-    private ICollectionsProcessor processor = new CollectionsProcessor();
-
-    private CollectionsAdapter adapter = new CollectionsAdapter();
+    @Inject ICollectionsProcessor processor;
+    @Inject CollectionsAdapter adapter;
 
 
     public ExecutorCollection(ExecutorCollectionCallback callback){
@@ -38,6 +42,8 @@ public class ExecutorCollection implements LifecycleExecutor {
 
     @Override
     public void startCalculation(){
+
+        getInject();
 
         doCalculateBackground(0, new ArrayList(), processor::addToStart);
         doCalculateBackground(1, new LinkedList(), processor::addToStart);
@@ -73,6 +79,9 @@ public class ExecutorCollection implements LifecycleExecutor {
     public void doCalculateBackground(final int position, List list, ICollections func){
         LOGGER.log("doCalculateBackground // position " + position);
         LOGGER.log("run 0 " + Thread.currentThread());
+
+       getInject();
+
         callback.responseShowProgress(position);
         executor.submit(() -> {
             LOGGER.log("run 1 " + Thread.currentThread());
@@ -116,6 +125,10 @@ public class ExecutorCollection implements LifecycleExecutor {
     //functional interface
     interface ICollections {
         int start(List list);
+    }
+
+    private void getInject(){
+        AppInject.getComponent().inject(this);
     }
 
 }

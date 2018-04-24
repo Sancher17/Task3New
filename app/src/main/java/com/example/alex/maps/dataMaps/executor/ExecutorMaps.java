@@ -5,6 +5,7 @@ import android.os.Looper;
 
 import com.example.alex.constants.Constants;
 import com.example.alex.arch.LifecycleExecutor;
+import com.example.alex.dagger.AppInject;
 import com.example.alex.maps.dataMaps.IMapsProcessor;
 import com.example.alex.maps.dataMaps.MapsProcessor;
 import com.example.alex.maps.MapsAdapter;
@@ -23,40 +24,44 @@ public class ExecutorMaps implements LifecycleExecutor {
 
     private static Logger LOGGER = new Logger(ExecutorMaps.class);
     private int core = Runtime.getRuntime().availableProcessors();
-    private ExecutorService executor = Executors.newFixedThreadPool(core+1);
+    private ExecutorService executor = Executors.newFixedThreadPool(core + 1);
 
     private ExecutorMapsCallback callback;
 
-    private IMapsProcessor processor = new MapsProcessor();
-
-    private MapsAdapter adapter = new MapsAdapter();
-
-    private MapsPresenter presenter;
-
     @Inject
-    public ExecutorMaps(ExecutorMapsCallback callback){
+    IMapsProcessor processor;
+    @Inject
+    MapsAdapter adapter;
+
+
+    public ExecutorMaps(ExecutorMapsCallback callback) {
         this.callback = callback;
     }
 
 
     @Override
-    public void startCalculation(){
+    public void startCalculation() {
 
-       doCalculateBackground(0, new TreeMap(), processor::add);
-       doCalculateBackground(1, new HashMap(), processor::add);
+        getInject();
 
-       doCalculateBackground(2, new TreeMap(), processor::search);
-       doCalculateBackground(3, new HashMap(), processor::search);
+        doCalculateBackground(0, new TreeMap(), processor::add);
+        doCalculateBackground(1, new HashMap(), processor::add);
 
-       doCalculateBackground(4, new TreeMap(), processor::remove);
-       doCalculateBackground(5, new HashMap(), processor::remove);
+        doCalculateBackground(2, new TreeMap(), processor::search);
+        doCalculateBackground(3, new HashMap(), processor::search);
+
+        doCalculateBackground(4, new TreeMap(), processor::remove);
+        doCalculateBackground(5, new HashMap(), processor::remove);
 
     }
 
 
-    public void doCalculateBackground(final int position, Map map, IMaps func){
+    public void doCalculateBackground(final int position, Map map, IMaps func) {
         LOGGER.log("doCalculateBackground // position " + position);
         LOGGER.log("run 0 " + Thread.currentThread());
+
+        getInject();
+
         callback.responseShowProgress(position);
         executor.submit(() -> {
             LOGGER.log("run 1 " + Thread.currentThread());
@@ -90,15 +95,20 @@ public class ExecutorMaps implements LifecycleExecutor {
     }
 
     @Override
-    public boolean isRunning(){
+    public boolean isRunning() {
         if (executor != null) {
             return executor.isShutdown();
         }
         return false;
     }
 
+    private void getInject() {
+        AppInject.getComponent().inject(this);
+    }
+
     //functional interface
     interface IMaps {
         int start(Map map);
     }
+
 }
