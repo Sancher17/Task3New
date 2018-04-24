@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import static com.example.alex.collections.CollectionsFragment.INPUT_NUMBER;
+import static com.example.alex.maps.MapsFragment.INPUT_NUMBER_MAP;
 
 
 public class MapsProcessor implements IMapsProcessor {
@@ -21,7 +22,7 @@ public class MapsProcessor implements IMapsProcessor {
     public int add(Map<Integer, String> map) {
         map.clear();
         long t1 = System.currentTimeMillis();
-        for (int i = 0; i < INPUT_NUMBER; i++) {
+        for (int i = 0; i < INPUT_NUMBER_MAP; i++) {
             map.put(i, "Map" + i);
         }
         int result = (int) (System.currentTimeMillis() - t1);
@@ -33,7 +34,7 @@ public class MapsProcessor implements IMapsProcessor {
         map.clear();
         add(map);
         long t1 = System.currentTimeMillis();
-        int value = INPUT_NUMBER / 2;
+        int value = INPUT_NUMBER_MAP / 2;
         int result = -1;
         for (Map.Entry<Integer, String> entry : map.entrySet()) {
             if (entry.getKey().equals(value)) {

@@ -25,7 +25,7 @@ public class MapsFragment extends Fragment implements MapsContract.View {
 
     private static Logger LOGGER = new Logger(MapsFragment.class);
     private String TAG = "life";
-    public static int INPUT_NUMBER;
+    public static int INPUT_NUMBER_MAP;
     @BindView(R.id.tab1_recycler)
     RecyclerView recyclerView;
     @BindView(R.id.editText_input_number_map)
@@ -81,7 +81,7 @@ public class MapsFragment extends Fragment implements MapsContract.View {
 
         String number = interNumber.getText().toString();
         if (number.length() > 0) {
-            INPUT_NUMBER = Integer.parseInt(number);
+            INPUT_NUMBER_MAP = Integer.parseInt(number);
             presenter.calculate();
         } else {
             showErrorEmptyNumber();
@@ -100,7 +100,7 @@ public class MapsFragment extends Fragment implements MapsContract.View {
 
     @Override
     public void stopAllProgressBars() {
-        for (int i = 0; i < 21; i++) {
+        for (int i = 0; i < 6; i++) {
             adapter.items.get(i).setProgressBar(false);
         }
     }
