@@ -100,7 +100,7 @@ public class MapsFragment extends Fragment implements MapsContract.View {
     }
 
     @Override
-    public void stopAllProgressBars() {
+    public void hideAllProgressBars() {
         for (int i = 0; i < 6; i++) {
             adapter.items.get(i).setProgressBar(false);
         }

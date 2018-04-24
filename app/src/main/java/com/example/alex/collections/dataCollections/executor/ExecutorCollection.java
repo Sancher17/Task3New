@@ -31,7 +31,6 @@ public class ExecutorCollection implements LifecycleExecutor {
 
     private CollectionsAdapter adapter = new CollectionsAdapter();
 
-    private CollectionsPresenter presenter;
 
     public ExecutorCollection(ExecutorCollectionCallback callback){
         this.callback = callback;

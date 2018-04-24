@@ -44,7 +44,7 @@ public class MapsPresenter extends PresenterBase<MapsContract.View> implements M
         LOGGER.log("stopСalculation");
         if (executor != null && !executor.isRunning()) {
             executor.stopCalculation();
-            getView().stopAllProgressBars();
+            getView().hideAllProgressBars();
             getView().updateAdapter();
             getView().showWait();
         }else {
@@ -61,6 +61,8 @@ public class MapsPresenter extends PresenterBase<MapsContract.View> implements M
 
     @Override
     public void responseCalculationStopped() {
+        getView().hideAllProgressBars();
+        getView().updateAdapter();
         getView().showCalculationStopped();
     }
 

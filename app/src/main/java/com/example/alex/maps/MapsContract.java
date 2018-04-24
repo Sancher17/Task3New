@@ -26,7 +26,7 @@ public interface MapsContract {
 
         void showCalculationStopped();
 
-        void stopAllProgressBars();
+        void hideAllProgressBars();
 
         void showWait();
 

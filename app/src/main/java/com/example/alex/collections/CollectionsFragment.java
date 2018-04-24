@@ -107,7 +107,7 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
     }
 
     @Override
-    public void stopAllProgressBars() {
+    public void hideAllProgressBars() {
         for (int i = 0; i < 21; i++) {
             adapter.items.get(i).setProgressBar(false);
         }

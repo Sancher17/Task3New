@@ -41,7 +41,7 @@ public class CollectionsPresenter extends PresenterBase<CollectionsContract.View
         LOGGER.log("stopСalculation");
         if (executor != null && !executor.isRunning()) {
             executor.stopCalculation();
-            getView().stopAllProgressBars();
+//            getView().hideAllProgressBars();
             getView().updateAdapter();
             getView().showWait();
         }else {
@@ -58,6 +58,8 @@ public class CollectionsPresenter extends PresenterBase<CollectionsContract.View
 
     @Override
     public void responseCalculationStopped() {
+        getView().hideAllProgressBars();
+        getView().updateAdapter();
         getView().showCalculationStopped();
     }
 

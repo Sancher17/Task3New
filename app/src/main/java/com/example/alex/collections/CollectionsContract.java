@@ -26,7 +26,7 @@ public interface CollectionsContract {
 
         void showCalculationStopped();
 
-        void stopAllProgressBars();
+        void hideAllProgressBars();
 
         void showWait();
 
