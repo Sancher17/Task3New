@@ -16,4 +16,5 @@ public class AppInject extends Application {
     public static AppComponent getComponent(){
         return component;
     }
+
 }

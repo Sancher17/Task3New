@@ -32,8 +32,14 @@ public class ExecutorCollection implements LifecycleExecutor {
 
     private ExecutorCollectionCallback callback;
 
-    @Inject ICollectionsProcessor processor;
-    @Inject CollectionsAdapter adapter;
+
+    /** c даггером * тут необходимо расскоментировать метод  getInject()*/
+//    @Inject ICollectionsProcessor processor;
+//    @Inject CollectionsAdapter adapter;
+
+    /** без даггера */
+    ICollectionsProcessor processor = new CollectionsProcessor();
+    CollectionsAdapter adapter = new CollectionsAdapter();
 
 
     public ExecutorCollection(ExecutorCollectionCallback callback){
@@ -43,7 +49,7 @@ public class ExecutorCollection implements LifecycleExecutor {
     @Override
     public void startCalculation(){
 
-        getInject();
+//        getInject();
 
         doCalculateBackground(0, new ArrayList(), processor::addToStart);
         doCalculateBackground(1, new LinkedList(), processor::addToStart);
@@ -80,7 +86,7 @@ public class ExecutorCollection implements LifecycleExecutor {
         LOGGER.log("doCalculateBackground // position " + position);
         LOGGER.log("run 0 " + Thread.currentThread());
 
-       getInject();
+//       getInject();
 
         callback.responseShowProgress(position);
         executor.submit(() -> {

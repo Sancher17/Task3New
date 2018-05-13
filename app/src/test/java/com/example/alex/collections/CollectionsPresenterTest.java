@@ -1,8 +1,7 @@
 package com.example.alex.collections;
 
-import com.example.alex.collections.dataCollections.executor.ExecutorCollection;
+import com.example.alex.arch.LifecycleExecutor;
 import com.example.alex.collections.dataCollections.executor.ExecutorCollectionCallback;
-import com.example.alex.utils.Logger;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,43 +10,89 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static com.example.alex.constants.Constants.COUNT_OF_OPERATIONS_COLLECTIONS;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
+import static org.junit.Assert.assertNotEquals;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CollectionsPresenterTest {
 
-    private CollectionsContract.View view;
+    @Mock
+    CollectionsContract.View view;
 
     @Mock
-    private CollectionsAdapter adapter;
+    LifecycleExecutor executor;
+
+    CollectionsPresenter presenter;
 
     @Mock
-    Logger logger;
-
-
-    @Mock
-    private ExecutorCollection executor;
-
-    private CollectionsPresenter presenter;
-
     ExecutorCollectionCallback callback;
 
     @Before
     public void setupPresenter() {
         MockitoAnnotations.initMocks(this);
-        view = new CollectionsFragment();
-        executor = new ExecutorCollection(callback);
         presenter = new CollectionsPresenter();
-        adapter = new CollectionsAdapter();
-        logger = new Logger(CollectionsPresenterTest.class);
+        presenter.attachView(view);
+//        executor = new ExecutorCollection(callback);
 
     }
+
+
+    @Test
+    public void attachDetachView() {
+        assertNotNull(presenter.getView());
+        presenter.detachView();
+        assertNull(presenter.getView());
+    }
+
 
     @Test
     public void responseShowProgress() {
         presenter.responseShowProgress(0);
         verify(view).showProgressBar(0);
-
     }
 
+    @Test
+    public void responseCalculationStopped() {
+        presenter.responseCalculationStopped();
+        verify(view).hideAllProgressBars();
+        verify(view).updateAdapter();
+        verify(view).showCalculationStopped();
+    }
+
+    @Test
+    public void responseHideProgress() {
+        presenter.responseHideProgress(0);
+        verify(view).hideProgressBar(0);
+    }
+
+    @Test
+    public void calculateCorrect() {
+        presenter.calculate();
+        assertNotNull(executor);
+        assertEquals(COUNT_OF_OPERATIONS_COLLECTIONS, 21);
+//        verify(executor).startCalculation(); // not
+        verify(view).showCalculationStarted();
+    }
+
+    @Test
+    public void calculateWrong() {
+        COUNT_OF_OPERATIONS_COLLECTIONS = 0;
+        presenter.calculate();
+        assertNotEquals(COUNT_OF_OPERATIONS_COLLECTIONS, 21);
+        verify(view).showCalculationIsStillWorking();
+    }
+
+
+    @Test
+    public void stopCalculation() {
+        presenter.stopСalculation();
+        // TODO: 13.05.2018 не сделано
+//        verify(executor).stopCalculation();
+//        verify(view).updateAdapter();
+    }
 }

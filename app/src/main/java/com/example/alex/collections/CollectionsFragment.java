@@ -42,7 +42,6 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
     @Inject
     CollectionsContract.Presenter presenter;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LOGGER.log("onCreateView");
@@ -148,7 +147,7 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
     @Override
     public void updateItemAdapter(int position) {
         adapter.notifyItemChanged(position);
-        LOGGER.log("notifyItemChanged // adapter // " + adapter.toString());
+//        LOGGER.log("notifyItemChanged // adapter // " + adapter.toString());
     }
 
     @Override

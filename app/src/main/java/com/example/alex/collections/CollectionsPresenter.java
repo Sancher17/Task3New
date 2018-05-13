@@ -15,7 +15,7 @@ public class CollectionsPresenter extends PresenterBase<CollectionsContract.View
 
     public void attachView(CollectionsContract.View mvpView) {
         super.attachView(mvpView);
-        LOGGER.log("attachView // getView() " + String.valueOf(getView()));
+//        LOGGER.log("attachView // getView() " + String.valueOf(getView()));
     }
 
     public void detachView() {
