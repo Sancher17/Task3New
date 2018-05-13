@@ -18,11 +18,18 @@ import org.androidannotations.annotations.App;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
+
+import rx.Observable;
+import rx.Observer;
+import rx.Scheduler;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class ExecutorCollection implements LifecycleExecutor {
 
@@ -31,6 +38,8 @@ public class ExecutorCollection implements LifecycleExecutor {
     private ExecutorService executor = Executors.newFixedThreadPool(core+1);
 
     private ExecutorCollectionCallback callback;
+
+    private Observer observer = null;
 
 
     /** c даггером * тут необходимо расскоментировать метод  getInject()*/
@@ -46,10 +55,60 @@ public class ExecutorCollection implements LifecycleExecutor {
         this.callback = callback;
     }
 
+
+    // пример со стартандроид ??
+    class CallableLongAction implements Callable <Integer>{
+
+        String data;
+
+        CallableLongAction (String data){
+            this.data = data;
+        }
+        @Override
+        public Integer call() throws Exception {
+            return longAction(data);
+        }
+    }
+
+    private int longAction(String str){
+        return Integer.parseInt(str);
+    }
+
     @Override
     public void startCalculation(){
 
 //        getInject();
+
+        // TODO: 13.05.2018 сделать цикл запуска вычислений
+
+
+        for (int i = 0; i < 20; i++) {
+            doCalculateBackground(i, new ArrayList(), processor:: addToStart);
+        }
+
+        //отправитель данных
+        Observable.fromCallable(new CallableLongAction("5"))
+                .subscribeOn(Schedulers.from(executor))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+
+        // получатель данных
+        observer = new Observer() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Object o) {
+
+            }
+        };
 
         doCalculateBackground(0, new ArrayList(), processor::addToStart);
         doCalculateBackground(1, new LinkedList(), processor::addToStart);
@@ -100,6 +159,15 @@ public class ExecutorCollection implements LifecycleExecutor {
             });
         });
     }
+
+    public void doCalculateBackground_2(){
+
+
+
+
+
+    }
+
 
     @Override
     public void stopCalculation() {
