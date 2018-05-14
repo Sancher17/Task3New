@@ -3,27 +3,20 @@ package com.example.alex.collections.dataCollections.executor;
 import android.os.Handler;
 import android.os.Looper;
 
-
 import com.example.alex.arch.LifecycleExecutor;
 import com.example.alex.collections.CollectionsAdapter;
-import com.example.alex.collections.CollectionsPresenter;
-import com.example.alex.constants.Constants;
 import com.example.alex.collections.dataCollections.CollectionsProcessor;
 import com.example.alex.collections.dataCollections.ICollectionsProcessor;
+import com.example.alex.constants.Constants;
 import com.example.alex.dagger.AppInject;
 import com.example.alex.utils.Logger;
-
-import org.androidannotations.annotations.App;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Observer;
@@ -35,80 +28,31 @@ public class ExecutorCollection implements LifecycleExecutor {
 
     private static Logger LOGGER = new Logger(ExecutorCollection.class);
     private int core = Runtime.getRuntime().availableProcessors();
-    private ExecutorService executor = Executors.newFixedThreadPool(core+1);
+    private ExecutorService executor = Executors.newFixedThreadPool(core + 1);
 
     private ExecutorCollectionCallback callback;
-
-    private Observer observer = null;
 
 
     /** c даггером * тут необходимо расскоментировать метод  getInject()*/
 //    @Inject ICollectionsProcessor processor;
 //    @Inject CollectionsAdapter adapter;
 
-    /** без даггера */
+    /**
+     * без даггера
+     */
     ICollectionsProcessor processor = new CollectionsProcessor();
     CollectionsAdapter adapter = new CollectionsAdapter();
 
 
-    public ExecutorCollection(ExecutorCollectionCallback callback){
+    public ExecutorCollection(ExecutorCollectionCallback callback) {
         this.callback = callback;
     }
 
 
-    // пример со стартандроид ??
-    class CallableLongAction implements Callable <Integer>{
-
-        String data;
-
-        CallableLongAction (String data){
-            this.data = data;
-        }
-        @Override
-        public Integer call() throws Exception {
-            return longAction(data);
-        }
-    }
-
-    private int longAction(String str){
-        return Integer.parseInt(str);
-    }
-
     @Override
-    public void startCalculation(){
+    public void startCalculation() {
 
 //        getInject();
-
-        // TODO: 13.05.2018 сделать цикл запуска вычислений
-
-
-        for (int i = 0; i < 20; i++) {
-            doCalculateBackground(i, new ArrayList(), processor:: addToStart);
-        }
-
-        //отправитель данных
-        Observable.fromCallable(new CallableLongAction("5"))
-                .subscribeOn(Schedulers.from(executor))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
-
-        // получатель данных
-        observer = new Observer() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(Object o) {
-
-            }
-        };
 
         doCalculateBackground(0, new ArrayList(), processor::addToStart);
         doCalculateBackground(1, new LinkedList(), processor::addToStart);
@@ -141,30 +85,40 @@ public class ExecutorCollection implements LifecycleExecutor {
     }
 
 
-    public void doCalculateBackground(final int position, List list, ICollections func){
+    public void doCalculateBackground(final int position, List list, ICollections func) {
         LOGGER.log("doCalculateBackground // position " + position);
         LOGGER.log("run 0 " + Thread.currentThread());
 
 //       getInject();
 
         callback.responseShowProgress(position);
-        executor.submit(() -> {
-            LOGGER.log("run 1 " + Thread.currentThread());
-            int result = func.start(list);
-            new Handler(Looper.getMainLooper()).post(() -> {
-                LOGGER.log("run 3 " + Thread.currentThread());
-                adapter.items.get(position).setResultOfCalculation(result);
+
+        LOGGER.log("run 1 " + Thread.currentThread());
+
+        int result = func.start(list);
+
+        Observer<Integer> observer = new Observer<Integer>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Integer integer) {
+                CollectionsAdapter.items.get(position).setResultOfCalculation(result);
                 Constants.COUNT_OF_OPERATIONS_COLLECTIONS -= 1;
                 callback.responseHideProgress(position);
-            });
-        });
-    }
+            }
+        };
 
-    public void doCalculateBackground_2(){
-
-
-
-
+        Observable.fromCallable(() -> result)
+                .subscribeOn(Schedulers.from(executor))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
 
     }
 
@@ -189,7 +143,7 @@ public class ExecutorCollection implements LifecycleExecutor {
     }
 
     @Override
-    public boolean isRunning(){
+    public boolean isRunning() {
         if (executor != null) {
             return executor.isShutdown();
         }
@@ -201,8 +155,7 @@ public class ExecutorCollection implements LifecycleExecutor {
         int start(List list);
     }
 
-    private void getInject(){
+    private void getInject() {
         AppInject.getComponent().inject(this);
     }
-
 }

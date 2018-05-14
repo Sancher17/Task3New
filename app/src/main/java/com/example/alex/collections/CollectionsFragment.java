@@ -114,7 +114,7 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
 
     @Override
     public void showWait() {
-        Toast.makeText(getActivity(), "Wait calculation soon stopped", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Wait calculation soon stop", Toast.LENGTH_LONG).show();
     }
 
     @Override
