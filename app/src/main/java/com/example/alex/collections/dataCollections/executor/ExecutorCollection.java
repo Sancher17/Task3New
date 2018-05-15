@@ -14,6 +14,7 @@ import com.example.alex.utils.Logger;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,38 +22,30 @@ import java.util.concurrent.Executors;
 import rx.Observable;
 import rx.Observer;
 import rx.Scheduler;
+import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class ExecutorCollection implements LifecycleExecutor {
 
     private static Logger LOGGER = new Logger(ExecutorCollection.class);
     private int core = Runtime.getRuntime().availableProcessors();
-    private ExecutorService executor = Executors.newFixedThreadPool(core + 1);
+    private ExecutorService executor;
 
     private ExecutorCollectionCallback callback;
 
-
-    /** c даггером * тут необходимо расскоментировать метод  getInject()*/
-//    @Inject ICollectionsProcessor processor;
-//    @Inject CollectionsAdapter adapter;
-
-    /**
-     * без даггера
-     */
-    ICollectionsProcessor processor = new CollectionsProcessor();
-    CollectionsAdapter adapter = new CollectionsAdapter();
-
+    private ICollectionsProcessor processor;
 
     public ExecutorCollection(ExecutorCollectionCallback callback) {
         this.callback = callback;
     }
 
-
     @Override
     public void startCalculation() {
 
-//        getInject();
+        processor = new CollectionsProcessor();
 
         doCalculateBackground(0, new ArrayList(), processor::addToStart);
         doCalculateBackground(1, new LinkedList(), processor::addToStart);
@@ -81,26 +74,16 @@ public class ExecutorCollection implements LifecycleExecutor {
         doCalculateBackground(18, new ArrayList(), processor::removeEnd);
         doCalculateBackground(19, new LinkedList(), processor::removeEnd);
         doCalculateBackground(20, new CopyOnWriteArrayList(), processor::removeEnd);
-
     }
 
+    private void doCalculateBackground(final int position, List list, ICollections func) {
 
-    public void doCalculateBackground(final int position, List list, ICollections func) {
-        LOGGER.log("doCalculateBackground // position " + position);
-        LOGGER.log("run 0 " + Thread.currentThread());
-
-//       getInject();
-
+        executor = Executors.newFixedThreadPool(core + 1);
         callback.responseShowProgress(position);
-
-        LOGGER.log("run 1 " + Thread.currentThread());
-
-        int result = func.start(list);
 
         Observer<Integer> observer = new Observer<Integer>() {
             @Override
-            public void onCompleted() {
-            }
+            public void onCompleted() {}
 
             @Override
             public void onError(Throwable e) {
@@ -108,20 +91,30 @@ public class ExecutorCollection implements LifecycleExecutor {
             }
 
             @Override
-            public void onNext(Integer integer) {
+            public void onNext(Integer result) {
                 CollectionsAdapter.items.get(position).setResultOfCalculation(result);
                 Constants.COUNT_OF_OPERATIONS_COLLECTIONS -= 1;
                 callback.responseHideProgress(position);
             }
         };
 
-        Observable.fromCallable(() -> result)
+        // развернутый способ 1 ,  кастомный Observable
+//        Observable.OnSubscribe<Integer> onSubscribe = subscriber -> {
+//            int result = func.start(list);
+//            subscriber.onNext(result);
+//        };
+//
+//        Observable.create(onSubscribe)
+//                .subscribeOn(Schedulers.from(executor))
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(observer);
+
+        // сжатый способ (аналогично способу 1)
+        Observable.fromCallable(() -> func.start(list))
                 .subscribeOn(Schedulers.from(executor))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
-
     }
-
 
     @Override
     public void stopCalculation() {
@@ -151,11 +144,8 @@ public class ExecutorCollection implements LifecycleExecutor {
     }
 
     //functional interface
-    interface ICollections {
+    private interface ICollections {
         int start(List list);
     }
 
-    private void getInject() {
-        AppInject.getComponent().inject(this);
-    }
 }

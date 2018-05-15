@@ -25,6 +25,8 @@ public class CollectionsPresenter extends PresenterBase<CollectionsContract.View
 
     @Override
     public void calculate() {
+        getView().setAllResultZero();
+        getView().updateAdapter();
         executor = new ExecutorCollection(this);
         if (Constants.COUNT_OF_OPERATIONS_COLLECTIONS == 21){
             executor.startCalculation();

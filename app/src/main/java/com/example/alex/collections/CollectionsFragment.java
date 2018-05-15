@@ -113,6 +113,13 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
     }
 
     @Override
+    public void setAllResultZero(){
+        for (int i = 0; i < 21; i++) {
+            adapter.items.get(i).setResultOfCalculation(0);
+        }
+    }
+
+    @Override
     public void showWait() {
         Toast.makeText(getActivity(), "Wait calculation soon stop", Toast.LENGTH_LONG).show();
     }
@@ -147,7 +154,6 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
     @Override
     public void updateItemAdapter(int position) {
         adapter.notifyItemChanged(position);
-//        LOGGER.log("notifyItemChanged // adapter // " + adapter.toString());
     }
 
     @Override
@@ -168,7 +174,6 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
     public void showCalculationStarted() {
         Toast.makeText(getContext(), "Calculation is starting", Toast.LENGTH_SHORT).show();
     }
-
 
     // lifecycle
     @Override

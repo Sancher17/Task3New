@@ -28,6 +28,8 @@ public interface CollectionsContract {
 
         void hideAllProgressBars();
 
+        void setAllResultZero();
+
         void showWait();
 
         void showCalculationNotStarted();
