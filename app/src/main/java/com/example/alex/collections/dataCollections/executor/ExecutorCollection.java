@@ -38,6 +38,9 @@ public class ExecutorCollection implements LifecycleExecutor {
 
     private ICollectionsProcessor processor;
 
+    private int count = 0;
+
+
     public ExecutorCollection(ExecutorCollectionCallback callback) {
         this.callback = callback;
     }
@@ -81,23 +84,6 @@ public class ExecutorCollection implements LifecycleExecutor {
         executor = Executors.newFixedThreadPool(core + 1);
         callback.responseShowProgress(position);
 
-        Observer<Integer> observer = new Observer<Integer>() {
-            @Override
-            public void onCompleted() {}
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(Integer result) {
-                CollectionsAdapter.items.get(position).setResultOfCalculation(result);
-                Constants.COUNT_OF_OPERATIONS_COLLECTIONS -= 1;
-                callback.responseHideProgress(position);
-            }
-        };
-
         // развернутый способ 1 ,  кастомный Observable
 //        Observable.OnSubscribe<Integer> onSubscribe = subscriber -> {
 //            int result = func.start(list);
@@ -113,27 +99,48 @@ public class ExecutorCollection implements LifecycleExecutor {
         Observable.fromCallable(() -> func.start(list))
                 .subscribeOn(Schedulers.from(executor))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onCompleted() {}
+                    @Override
+                    public void onError(Throwable e) {}
+                    @Override
+                    public void onNext(Integer result) {
+                        LOGGER.log("onNext " + count + "  " + Schedulers.computation());
+                        count++;
+                        CollectionsAdapter.items.get(position).setResultOfCalculation(result);
+                        Constants.COUNT_OF_OPERATIONS_COLLECTIONS -= 1;
+                        callback.responseHideProgress(position);
+                    }
+                });
     }
 
     @Override
     public void stopCalculation() {
+        LOGGER.log("stop / Schedulers ");
         executor.shutdownNow();
-        ExecutorService interrupt = Executors.newFixedThreadPool(1);
-        interrupt.submit(() -> {
-            while (!executor.isTerminated()) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            new Handler(Looper.getMainLooper()).post(() -> {
-                callback.responseCalculationStopped();
-                Constants.COUNT_OF_OPERATIONS_COLLECTIONS = 21;
-            });
-        });
+        Schedulers.shutdown();
     }
+
+
+//    @Override
+//    public void stopCalculation() {
+//        executor.shutdownNow();
+//        ExecutorService interrupt = Executors.newFixedThreadPool(1);
+//        interrupt.submit(() -> {
+//            while (!executor.isTerminated()) {
+//                try {
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            new Handler(Looper.getMainLooper()).post(() -> {
+//                callback.responseCalculationStopped();
+//                Constants.COUNT_OF_OPERATIONS_COLLECTIONS = 21;
+//            });
+//        });
+//    }
 
     @Override
     public boolean isRunning() {
