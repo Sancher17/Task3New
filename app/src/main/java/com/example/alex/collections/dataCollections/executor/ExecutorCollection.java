@@ -32,14 +32,13 @@ public class ExecutorCollection implements LifecycleExecutor {
 
     private static Logger LOGGER = new Logger(ExecutorCollection.class);
     private int core = Runtime.getRuntime().availableProcessors();
-    private ExecutorService executor;
+    private ExecutorService executor = Executors.newFixedThreadPool(core + 1);
 
     private ExecutorCollectionCallback callback;
 
     private ICollectionsProcessor processor;
 
     private int count = 0;
-
 
     public ExecutorCollection(ExecutorCollectionCallback callback) {
         this.callback = callback;
@@ -81,7 +80,6 @@ public class ExecutorCollection implements LifecycleExecutor {
 
     private void doCalculateBackground(final int position, List list, ICollections func) {
 
-        executor = Executors.newFixedThreadPool(core + 1);
         callback.responseShowProgress(position);
 
         // развернутый способ 1 ,  кастомный Observable
@@ -106,7 +104,7 @@ public class ExecutorCollection implements LifecycleExecutor {
                     public void onError(Throwable e) {}
                     @Override
                     public void onNext(Integer result) {
-                        LOGGER.log("onNext " + count + "  " + Schedulers.computation());
+                        LOGGER.log("onNext " + count + " position " + position + " pool " + executor);
                         count++;
                         CollectionsAdapter.items.get(position).setResultOfCalculation(result);
                         Constants.COUNT_OF_OPERATIONS_COLLECTIONS -= 1;
@@ -117,30 +115,23 @@ public class ExecutorCollection implements LifecycleExecutor {
 
     @Override
     public void stopCalculation() {
-        LOGGER.log("stop / Schedulers ");
+        LOGGER.log("stop");
         executor.shutdownNow();
-        Schedulers.shutdown();
+        ExecutorService interrupt = Executors.newFixedThreadPool(1);
+        interrupt.submit(() -> {
+            while (!executor.isTerminated()) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            new Handler(Looper.getMainLooper()).post(() -> {
+                callback.responseCalculationStopped();
+                Constants.COUNT_OF_OPERATIONS_COLLECTIONS = 21;
+            });
+        });
     }
-
-
-//    @Override
-//    public void stopCalculation() {
-//        executor.shutdownNow();
-//        ExecutorService interrupt = Executors.newFixedThreadPool(1);
-//        interrupt.submit(() -> {
-//            while (!executor.isTerminated()) {
-//                try {
-//                    Thread.sleep(500);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            new Handler(Looper.getMainLooper()).post(() -> {
-//                callback.responseCalculationStopped();
-//                Constants.COUNT_OF_OPERATIONS_COLLECTIONS = 21;
-//            });
-//        });
-//    }
 
     @Override
     public boolean isRunning() {

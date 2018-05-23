@@ -11,11 +11,9 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static com.example.alex.constants.Constants.COUNT_OF_OPERATIONS_COLLECTIONS;
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertNotEquals;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -38,9 +36,7 @@ public class CollectionsPresenterTest {
         presenter = new CollectionsPresenter();
         presenter.attachView(view);
 //        executor = new ExecutorCollection(callback);
-
     }
-
 
     @Test
     public void attachDetachView() {
@@ -73,10 +69,9 @@ public class CollectionsPresenterTest {
     @Test
     public void calculateCorrect() {
         presenter.calculate();
-        assertNotNull(executor);
-        assertEquals(COUNT_OF_OPERATIONS_COLLECTIONS, 21);
-//        verify(executor).startCalculation(); // not
-        verify(view).showCalculationStarted();
+        verify(view).setAllResultZero();
+        verify(view).updateAdapter();
+
     }
 
     @Test
@@ -86,7 +81,6 @@ public class CollectionsPresenterTest {
         assertNotEquals(COUNT_OF_OPERATIONS_COLLECTIONS, 21);
         verify(view).showCalculationIsStillWorking();
     }
-
 
     @Test
     public void stopCalculation() {

@@ -11,7 +11,7 @@ public class CollectionsPresenter extends PresenterBase<CollectionsContract.View
 
     private static Logger LOGGER = new Logger(CollectionsPresenter.class);
 
-    private LifecycleExecutor executor;
+    private LifecycleExecutor executor = new ExecutorCollection(this);
 
     public void attachView(CollectionsContract.View mvpView) {
         super.attachView(mvpView);
@@ -27,7 +27,6 @@ public class CollectionsPresenter extends PresenterBase<CollectionsContract.View
     public void calculate() {
         getView().setAllResultZero();
         getView().updateAdapter();
-        executor = new ExecutorCollection(this);
         if (Constants.COUNT_OF_OPERATIONS_COLLECTIONS == 21){
             executor.startCalculation();
             getView().showCalculationStarted();

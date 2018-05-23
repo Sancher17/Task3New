@@ -7,8 +7,8 @@ public class Logger {
 
     private String logTag;
 
-    private boolean isLogging = true;
-//    private boolean isLogging = false;
+//    private boolean isLogging = true;
+    private boolean isLogging = false;
 
     public Logger(Class c) {
         logTag = c.getSimpleName();
