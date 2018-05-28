@@ -22,13 +22,7 @@ public class CollectionsPresenterTest {
     @Mock
     CollectionsContract.View view;
 
-    @Mock
-    LifecycleExecutor executor;
-
     CollectionsPresenter presenter;
-
-    @Mock
-    ExecutorCollectionCallback callback;
 
     @Before
     public void setupPresenter() {

@@ -33,7 +33,7 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
     @BindView(R.id.tab1_recycler)
     RecyclerView recyclerView;
     @BindView(R.id.editText_input_number_collection)
-    EditText interNumber;
+    EditText enterNumber;
 
 
     @Inject
@@ -86,7 +86,7 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
             }
         }
 
-        String number = interNumber.getText().toString();
+        String number = enterNumber.getText().toString();
         if (number.length() > 0) {
             INPUT_NUMBER = Integer.parseInt(number);
             presenter.calculate();
@@ -181,7 +181,6 @@ public final class CollectionsFragment extends Fragment implements CollectionsCo
         super.onStart();
         Log.d(TAG, "onStart: ");
     }
-
 
     @Override
     public void onStop() {
